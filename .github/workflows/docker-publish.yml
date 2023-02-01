@@ -1,24 +1,29 @@
-# Use an official Python image as the base image
-FROM python:3.9
+name: Docker
 
-# Set the working directory in the container to /app
-WORKDIR /app
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
 
-# Copy the requirements.txt file to the container
-COPY requirements.txt .
+on:
 
-# Install the required packages
-RUN pip install -r requirements.txt
+  push:
+    branches: 
+        - master
 
-# Copy the rest of the application files to the container
-COPY . .
 
-# Set environment variables for the Django app
-ENV DJANGO_SETTINGS_MODULE=myproject.settings
-ENV PYTHONUNBUFFERED=1
 
-# Run migrations and collectstatic files
-RUN python manage.py 
+jobs:
+  test:
 
-# Start the Django development server on port 8000
-CMD ["python", "manage.py"]
+    runs-on: ubuntu-latest
+
+
+    steps:
+        - uses: actions/checkout@v3
+
+        - name: Run tests
+          run: |
+                docker build . -f Dockerfile -t ${{secrets.myuser}}/iti_lab2:v1
+                docker login -u ${{secrets.myuser}} -p ${{secrets.mypass}}
+                docker push seada98/lab2:v1
