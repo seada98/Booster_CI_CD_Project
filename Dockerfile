@@ -18,7 +18,8 @@ ENV DJANGO_SETTINGS_MODULE=myproject.settings
 ENV PYTHONUNBUFFERED=1
 
 # Run migrations and collectstatic files
-RUN python manage.py 
+RUN python manage.py makemigrations
+RUN python manage.py migrate
 
 # Start the Django development server on port 8000
-CMD ["python", "manage.py"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
